@@ -109,6 +109,25 @@ export function PacientePerfilPage({ onAtualizarUsuario, onVoltar }: Props) {
 
   if (loading) return <div className="page page--form"><p role="status">Carregando seus dados...</p></div>;
 
+  // Não renderiza o formulário quando o perfil não foi carregado. Além de
+  // evitar acesso a propriedades de `null`, impede edição de um cadastro vazio.
+  if (!perfil) {
+    return (
+      <div className="page page--form">
+        <header className="page__header">
+          <h1 className="page__title">Meu perfil</h1>
+          <p className="page__description">Não foi possível carregar seus dados cadastrais.</p>
+        </header>
+        <div className="card form-page__main">
+          <Notice variant="error">{error || 'Não foi possível carregar seu cadastro. Tente novamente mais tarde.'}</Notice>
+          <div className="form-actions">
+            <Button type="button" variant="secondary" onClick={onVoltar}>Voltar</Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="page page--form">
       <header className="page__header">
@@ -136,11 +155,11 @@ export function PacientePerfilPage({ onAtualizarUsuario, onVoltar }: Props) {
               <div className="perfil-readonly" style={{ marginTop: '1rem' }}>
                 <div className="perfil-readonly__field">
                   <span className="perfil-readonly__label">Cadastro realizado em</span>
-                  <span className="perfil-readonly__value">{formatDateTime(perfil.criadoEm)}</span>
+                  <span className="perfil-readonly__value">{formatDateTime(perfil?.criadoEm)}</span>
                 </div>
                 <div className="perfil-readonly__field">
                   <span className="perfil-readonly__label">Última atualização</span>
-                  <span className="perfil-readonly__value">{formatDateTime(perfil.atualizadoEm)}</span>
+                  <span className="perfil-readonly__value">{formatDateTime(perfil?.atualizadoEm)}</span>
                 </div>
               </div>
             </FormSection>
